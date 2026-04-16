@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Mua hàng</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<h2 style="text-align:center;">Mua sản phẩm</h2>
+
+<div id="popup" class="popup" style="display:flex;">
+<div class="popup-content">
+
+<h3>Nhập thông tin</h3>
+
+<input id="ten" placeholder="Họ tên">
+<input id="dc" placeholder="Địa chỉ">
+<input id="sdt" placeholder="SĐT">
+
+<label><input type="checkbox" id="ok"> Xác nhận mua</label>
+
+<button onclick="dat()">Thanh toán</button>
+
+</div>
+</div>
+
+<div id="successBox" class="popup">
+<div class="popup-content">
+<div style="font-size:60px;color:green;">✔</div>
+<h2>Thanh toán thành công</h2>
+<button onclick="location.href='index.html'">Về trang chủ</button>
+</div>
+</div>
+
+<script>
+let products=JSON.parse(localStorage.getItem("products"));
+let id=localStorage.getItem("buyNow");
+let p=products[id];
+
+function dat(){
+if(!ten.value||!dc.value||!sdt.value){
+alert("Nhập đủ!");
+return;
+}
+if(!ok.checked){
+alert("Xác nhận!");
+return;
+}
+if(p[3]<=0){
+alert("Hết hàng");
+return;
+}
+
+p[3]--;
+localStorage.setItem("products",JSON.stringify(products));
+
+popup.style.display="none";
+successBox.style.display="flex";
+}
+</script>
+
+</body>
+</html>

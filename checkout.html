@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Thanh toán</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<h2 style="text-align:center;">💳 Thanh toán</h2>
+
+<h3 id="total" style="text-align:center;"></h3>
+
+<form onsubmit="pay(event)" style="max-width:300px;margin:auto;">
+<input id="name" placeholder="Họ tên" required>
+<input id="address" placeholder="Địa chỉ" required>
+<input id="phone" placeholder="SĐT" required>
+
+<label>
+<input type="checkbox" id="ok"> Xác nhận mua hàng
+</label>
+
+<button>Thanh toán</button>
+</form>
+
+<!-- POPUP THÀNH CÔNG -->
+<div id="successBox" class="popup">
+<div class="popup-content">
+<div style="font-size:60px;color:green;">✔</div>
+<h2>Thanh toán thành công</h2>
+<button onclick="goHome()">Về trang chủ</button>
+</div>
+</div>
+
+<script>
+let products = JSON.parse(localStorage.getItem("products")) || [];
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+let total = 0;
+
+cart.forEach(item=>{
+let p = products[item.id];
+total += p[1]*item.qty;
+});
+
+document.getElementById("total").innerText =
+"Tổng tiền: " + total.toLocaleString() + "₫";
+
+function pay(e){
+e.preventDefault();
+
+if(!ok.checked){
+alert("Bạn chưa xác nhận!");
+return;
+}
+
+if(cart.length==0){
+alert("Giỏ hàng trống!");
+return;
+}
+
+// 🔥 TRỪ KHO
+cart.forEach(item=>{
+products[item.id][3] -= item.qty;
+if(products[item.id][3] < 0){
+products[item.id][3] = 0;
+}
+});
+
+localStorage.setItem("products", JSON.stringify(products));
+
+// xóa giỏ
+localStorage.removeItem("cart");
+
+// hiện popup
+successBox.style.display="flex";
+}
+
+function goHome(){
+location.href="index.html";
+}
+</script>
+
+</body>
+</html>
